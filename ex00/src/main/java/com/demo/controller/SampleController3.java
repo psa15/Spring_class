@@ -15,6 +15,8 @@ public class SampleController3 {
 	
 	@RequestMapping("doD")
 	public String doD(Model model) {
+		//Modle : jsp에서 참조할 수 있는 데이터 전달하는 기능 제공
+		//model.addAttribute("product", product); 메소드로
 		
 		//db에 연결해야하지만 지금은 수동으로
 		ProductVO product = new ProductVO("스프링 프레임워크 책", 40000);

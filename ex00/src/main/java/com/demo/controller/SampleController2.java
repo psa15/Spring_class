@@ -14,6 +14,7 @@ public class SampleController2 {
 	
 	//요청 시 메소드의 파라미터를 제공해야 문제가 생기지 않는다.
 	//http://localhost:9090/doC?name=user01&age=100
+	//기본주소/요청주소?파라미터1=값1&파라미터2=값2
 	//? 뒤를 쿼리 스트링이라고 함
 	@RequestMapping("doC") 
 	public String doC(@ModelAttribute("name") String name,@ModelAttribute("age") int age) {
