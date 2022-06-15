@@ -87,6 +87,7 @@ public class SampleController {
 		return "/sample/ex01"; ///sample/ex01 : jsp 파일명
 	}
 	//2) 각각의 필드를 사용
+	//참고. 파라미터가 기본데이터타입은 값을 제공하지 않으면 에러 발생
 	@GetMapping("/ex02") // http://localhost:9090/sample/ex02?name=김지원&age=100
 	public String ex02(String name, int age) {
 		
@@ -105,8 +106,16 @@ public class SampleController {
 		
 		return "/sample/ex0201"; //jsp파일명
 	}
-	
-	
-	
+	//public String ex0202(@RequestParam(value = "클라이언트쪽에서 보내는 이름") String name, int age){}
+	//@RequestParam을 사용 시 파라미터에 반드시 값을 제공
+	@RequestMapping("/ex0202")
+	public String ex0202(@RequestParam(value = "name",required = false, defaultValue = "김지원") String name, 
+			@RequestParam(value = "age", required = false, defaultValue = "0") int age) {
+		
+		logger.info("이름은? " + name);
+		logger.info("나이는? " + age);
+		
+		return "/sample/ex0202";
+	}
 	
 }

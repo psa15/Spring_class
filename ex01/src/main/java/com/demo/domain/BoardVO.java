@@ -27,6 +27,17 @@ public class BoardVO {
 	private String content;
 	private int viewcnt;
 	private Date regdate;
+	
+	//생성자
+	public BoardVO(int bno, String writer, String title, String content, int viewcnt, Date regdate) {
+		super();
+		this.bno = bno;
+		this.writer = writer;
+		this.title = title;
+		this.content = content;
+		this.viewcnt = viewcnt;
+		this.regdate = regdate;
+	}
 
 	
 }
