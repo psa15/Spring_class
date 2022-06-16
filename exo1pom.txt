@@ -135,17 +135,6 @@
 		    <artifactId>jackson-databind</artifactId>
 		    <version>2.13.3</version>
 		</dependency>
-		
-		<!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
-		<!-- 파일 업로드 기능 지원 라이브러리 -->
-		<!-- 
-			servlet-context.xml에서 org.springframework.web.multipart.commons.CommonsMultipartResolve 클래스에서
-				commons.fileupload 라이브러리를 참조하고 있다 -->
-		<dependency>
-		    <groupId>commons-fileupload</groupId>
-		    <artifactId>commons-fileupload</artifactId>
-		    <version>1.3.3</version>
-		</dependency>		
 					
 		<!-- Test -->
 		<dependency>

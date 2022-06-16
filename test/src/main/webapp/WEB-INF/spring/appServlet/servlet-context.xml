@@ -21,22 +21,10 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="com.demo.controller" />
-	<context:component-scan base-package="com.demo.exception" />
+	<context:component-scan base-package="com.docmall.controller" />
 	
-	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<beans:property name="defaultEncoding" value="utf-8"></beans:property> <!-- property : setter -->
-		<beans:property name="maxUploadSize" value="104857560"></beans:property><!-- 용량 제한 -->
-		<!-- 전송파는 파일들의 전체 크기 : 1024 * 1024 * 10 bytes = 10MB -->
-		
-		<beans:property name="maxUploadSizePerFile" value="2097152"></beans:property>
-		<!-- 개별 파일 하나의 크기 : 1024 * 1024 * 2 bytes = 2MB -->
-		
-		<beans:property name="uploadTempDir" value="file:/C:/Dev/upload/tmp"></beans:property>
-		<!-- 서버에 업로드시 사용될 임시폴더 경로 설정 : 클라이언트가 파일 하나를 업로드/다운로드 하면 중간에 임시파일이 생성되고 사라지면서 해당파일이 생성됨 -->
-		
-		<beans:property name="maxInMemorySize" value="10485756"></beans:property>
-		<!-- 서버에 업로드시 사용될 서버측 메모리사용 설정 -->
-	</beans:bean>
+	<context:component-scan base-package="com.docmall.exception" />
+	
+	
 	
 </beans:beans>

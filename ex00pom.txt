@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.demo</groupId>
 	<artifactId>controller</artifactId>
-	<name>ex01</name>
+	<name>ex00</name>
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 	<properties>
@@ -80,7 +80,7 @@
 					<artifactId>jmxri</artifactId>
 				</exclusion>
 			</exclusions>
-			<!-- <scope>runtime</scope> -->
+			<scope>runtime</scope>
 		</dependency>
 
 		<!-- @Inject -->
@@ -91,22 +91,12 @@
 		</dependency>
 				
 		<!-- Servlet -->
-		<!--
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>2.5</version>
 			<scope>provided</scope>
 		</dependency>
-		  -->
-		<dependency>
-		    <groupId>javax.servlet</groupId>
-		    <artifactId>javax.servlet-api</artifactId>
-		    <version>3.1.0</version>
-		    <scope>provided</scope>
-		</dependency>
-		
-		
 		<dependency>
 			<groupId>javax.servlet.jsp</groupId>
 			<artifactId>jsp-api</artifactId>
@@ -119,14 +109,7 @@
 			<version>1.2</version>
 		</dependency>
 		
-		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
-		<dependency>
-		    <groupId>org.projectlombok</groupId>
-		    <artifactId>lombok</artifactId>
-		    <version>1.18.24</version>
-		    <scope>provided</scope>
-		</dependency>
-		
+		<!-- 새로 내가 추가 시작 -->
 		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
 		<!-- jackson-databind-2.13.3.jar JSON 기능 지원 목적 -->
 		<!-- 의존하고 있는 다른 라이브러리가 함께 다운된다. jackson-annotations, jackson-core -->
@@ -136,23 +119,80 @@
 		    <version>2.13.3</version>
 		</dependency>
 		
-		<!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
-		<!-- 파일 업로드 기능 지원 라이브러리 -->
-		<!-- 
-			servlet-context.xml에서 org.springframework.web.multipart.commons.CommonsMultipartResolve 클래스에서
-				commons.fileupload 라이브러리를 참조하고 있다 -->
+		<!-- https://mvnrepository.com/artifact/com.oracle.database.jdbc/ojdbc8 -->
+		<!-- 오라클 데이터베이스 드라이버 -->
 		<dependency>
-		    <groupId>commons-fileupload</groupId>
-		    <artifactId>commons-fileupload</artifactId>
-		    <version>1.3.3</version>
-		</dependency>		
-					
+		    <groupId>com.oracle.database.jdbc</groupId>
+		    <artifactId>ojdbc8</artifactId>
+		    <version>21.5.0.0</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/com.zaxxer/HikariCP -->
+		<!-- Connection Pool기능지원 -->
+		<dependency>
+		    <groupId>com.zaxxer</groupId>
+		    <artifactId>HikariCP</artifactId>
+		    <version>2.7.4</version>
+		</dependency>
+		
+		<!-- mybatis 사용 시 sql 구문에 대한 상세 로그를 출력 -->
+		<!-- 1)log4jdbc.log4j2.properties 
+			 2)logback.xml 
+			  - 2개의 파일을 src/main/resource 폴더에 복사-->
+		<!-- 로그 level 제어 설정: log4j.xml 파일 -->
+		<dependency>
+		    <groupId>org.bgee.log4jdbc-log4j2</groupId>
+		    <artifactId>log4jdbc-log4j2-jdbc4</artifactId>
+		    <version>1.16</version>
+		</dependency>
+		
+		
+		<!-- mybatis 사용하기위한 아래 5가지 라이브러리(With spring-test). -->
+		<!-- 1)mybatis 2)mybatis-spring 3)spring-jdbc 4)spring-tx 5)spring-test -->
+		<!-- 1)https://mvnrepository.com/artifact/org.mybatis/mybatis -->
+		<!-- xml문서에 sql구문을 관리하는 형태의 특징 -->
+		<dependency>
+		    <groupId>org.mybatis</groupId>
+		    <artifactId>mybatis</artifactId>
+		    <version>3.4.6</version>
+		</dependency>
+		<!-- 2)https://mvnrepository.com/artifact/org.mybatis/mybatis-spring -->
+		<!-- Mybatis와 스프링을 중계해주는 중간연결고리 -->
+		<dependency>
+		    <groupId>org.mybatis</groupId>
+		    <artifactId>mybatis-spring</artifactId>
+		    <version>1.3.2</version>
+		</dependency>
+		<!-- 3)https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
+		<!-- 자바의 jdbc를 스프링버전으로 만든 의미 -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-jdbc</artifactId>
+		    <version>${org.springframework-version}</version>
+		</dependency>
+		<!-- 4)https://mvnrepository.com/artifact/org.springframework/spring-tx -->
+		<!-- 트랜잭션 기능 제공 -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-tx</artifactId>
+		    <version>${org.springframework-version}</version>
+		</dependency>
+		<!-- 5)JUnit와 함께 테스트를 위한 관련 라이브러리 -->
+		<!-- 테스트 기능 제공 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+		<!-- 추가 끝 -->
+		
 		<!-- Test -->
+		<!-- 단위테스트 기능을 제공하는 프로그램 -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.7</version>
-			<scope>test</scope>
+			<version>4.12</version>
+			<!--<scope>test</scope>  -->
 		</dependency>        
 	</dependencies>
     <build>
