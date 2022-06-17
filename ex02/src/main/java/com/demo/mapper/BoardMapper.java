@@ -1,7 +1,10 @@
 package com.demo.mapper;
 
-//Mapper Interface
+import com.demo.domain.BoardVO;
+
 public interface BoardMapper {
 
-	//기능목적의 추상메소드 정의
+	//abstract method
+	void insert(BoardVO vo);
+	
 }
