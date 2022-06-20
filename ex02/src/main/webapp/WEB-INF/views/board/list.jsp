@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <!doctype html>
 <html lang="en">
@@ -53,30 +53,25 @@
   <table class="table table-hover">
 	  <thead>
 	    <tr>
-	      <th scope="col">#</th>
-	      <th scope="col">First</th>
-	      <th scope="col">Last</th>
-	      <th scope="col">Handle</th>
+	      <th scope="col">글번호</th>
+	      <th scope="col">제목</th>
+	      <th scope="col">작성자</th>
+	      <th scope="col">등록일</th>
 	    </tr>
 	  </thead>
 	  <tbody>
+	  <c:forEach items="${list}" var="board">
 	    <tr>
-	      <th scope="row">1</th>
-	      <td>Mark</td>
-	      <td>Otto</td>
-	      <td>@mdo</td>
+	    <!-- BoardVO클래스의 필드명으로 코딩했지만, 호출은 getter메소드가 사용됨 -->
+	    <%-- html 주석인 <!-- -->를 사용할 때 서버관련 코드는 작성 불가 
+	    	 ${} : html주석은 서버에서도 보이기 때문에 jsp주석인 여기 안에 설명을 달아야 한다.--%>
+	      <th scope="row"><c:out value="${board.bno}" /></th>
+	      <td><a href="/board/get?bno=${board.bno}"><c:out value="${board.title}" /></a></td>
+	      <td><c:out value="${board.writer}" /></td>
+	      <td><fmt:formatDate value="${board.regdate}" pattern="yyyy-MM-dd hh:mm:ss"/></td>
 	    </tr>
-	    <tr>
-	      <th scope="row">2</th>
-	      <td>Jacob</td>
-	      <td>Thornton</td>
-	      <td>@fat</td>
-	    </tr>
-	    <tr>
-	      <th scope="row">3</th>
-	      <td colspan="2">Larry the Bird</td>
-	      <td>@twitter</td>
-	    </tr>
+	   </c:forEach> 
+	   
 	  </tbody>
 	</table>
 	<nav aria-label="...">
