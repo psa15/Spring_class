@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import com.demo.domain.BoardVO;
+import com.demo.domain.Criteria;
 import com.demo.mapper.BoardMapper;
 
 @Service
@@ -43,6 +44,18 @@ public class BoardServiceImpl implements BoardService {
 	public void remove(Long bno) {
 		mapper.remove(bno);
 		
+	}
+
+	@Override
+	public List<BoardVO> getListWithPaging(Criteria cri) {
+		
+		return mapper.getListWithPaging(cri);
+	}
+
+	@Override
+	public int getTotalCount() {
+	
+		return mapper.getTotalCount();
 	}
 
 }

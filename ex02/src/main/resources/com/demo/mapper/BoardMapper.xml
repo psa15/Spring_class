@@ -8,11 +8,32 @@
 		INSERT INTO tbl_board(bno, title, content, writer) VALUES(seq_board.nextval, #{title}, #{content}, #{writer})
 	</insert>
 	
+	<!-- 리스트 -->
 	<!-- select문 사용시에만 resultType 속성 필수 -->
 	<select id="getList" resultType="com.demo.domain.BoardVO">
 		SELECT bno, title, content, writer, regdate FROM tbl_board ORDER BY bno desc
 		<!-- sql구문 뒤에 ; X -->
 	</select>
+	
+	<select id="getListWithPaging" parameterType="com.demo.domain.Criteria" resultType="com.demo.domain.BoardVO">
+		<![CDATA[
+		SELECT rn, bno, title, content, writer, regdate
+		FROM(
+		    SELECT /*+ INDEX_DESC(tbl_board PK_BOARD) */ ROWNUM rn, bno, title, content, writer, regdate 
+		    FROM tbl_board
+		    WHERE ROWNUM <= #{pageNum} * #{amount}
+		)
+		WHERE rn > (#{pageNum}-1) * #{amount}	
+		]]>
+		<!-- <를 문자로 보는 것이 아니라 시작태그 문자로 봐서 오류가 남 - 파싱 이라고 부름
+				어떤 문자든 신경쓰지말고 스킵하게 하는 XML문법이 이씀
+				CDATA 섹션 : <![CDATA[내용]]>  -->
+	</select>
+	
+	<select id="getTotalCount" resultType="int">
+		SELECT count(*) FROM tbl_board
+	</select>
+	
 	
 	<select id="get" parameterType="Long" resultType="com.demo.domain.BoardVO">
 		SELECT bno, title, content, writer, regdate FROM tbl_board WHERE bno = #{bno}

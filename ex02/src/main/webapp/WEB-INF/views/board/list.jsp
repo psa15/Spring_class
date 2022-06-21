@@ -12,6 +12,7 @@
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.88.1">
     <title>Pricing example · Bootstrap v4.6</title>
+	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.6/examples/pricing/">
 
@@ -41,6 +42,20 @@
     
     <!-- Custom styles for this template -->
     <link href="/resources/css/pricing.css" rel="stylesheet">
+
+	<script>
+		$(document).ready(function(){
+			//페이지 번호 클릭하면 동작하는 기능
+			$("li.page-item a.page-link").on("click", function(e){
+				//a태그는 클릭하면 걸린 링크로 이동, 우리는 파라미터값으로 제공해야 함
+				//e : 이벤트 변수
+				e.preventDefault(); //태그의 기본특성을 제거 <a>태그의 링크기능을 제거
+				let url = "list?pageNum=" + $(this).attr("href") + "&amount=10"; 
+					location.href=url;
+
+			});
+		});
+	</script>
   </head>
   <body>
     
@@ -76,17 +91,38 @@
 	</table>
 	<nav aria-label="...">
 	  <ul class="pagination justify-content-center">
-	    <li class="page-item disabled">
-	      <span class="page-link">Previous</span>
-	    </li>
-	    <li class="page-item"><a class="page-link" href="#">1</a></li>
+	  
+	  	<%-- 이전표시 --%>
+	  	<c:if test="${pageMaker.prev}">
+		    <li class="page-item">
+		      <a class="page-link" href="${pageMaker.startPage-1}">이전</a>
+		    </li>
+	    </c:if>
+	    
+	    <%-- 페이지 번호 표시 ( 1 2 3 4 5) --%>
+	    <c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="num">
+	    	<li class='page-item ${pageMaker.cri.pageNum == num ? "active" : ""}'><a class="page-link" href="${num}">${num}</a></li>
+	    </c:forEach>
+	    <%--
+	    	${pageMaker.cri.pageNum == num ? "active" : ""}
+    	 	 - 현재 페이지와 num이 같으면 활성화(파랗게 칠해지는 거)
+    	 	 - active가 현재페이지 파랗게 보여주는 키워드임 
+	     --%>
+	     
+	    <%-- 
 	    <li class="page-item active" aria-current="page">
 	      <span class="page-link">2</span>
 	    </li>
 	    <li class="page-item"><a class="page-link" href="#">3</a></li>
-	    <li class="page-item">
-	      <a class="page-link" href="#">Next</a>
-	    </li>
+	    --%>
+	    
+	    <%-- 다음표시 --%>
+	    <c:if test="${pageMaker.next}">
+		    <li class="page-item">
+		      <a class="page-link" href="${pageMaker.endPage +1}">다음</a>
+		    </li>
+	    </c:if>
+	    
 	  </ul>
 	</nav>
 
