@@ -34,13 +34,18 @@ public class Criteria {
 		this.amount = amount;
 	}
 	
-	//검색기능
+	//검색기능. 메소드명 규칙: get대문자___() ->  xml mapper파일에서 사용될 메소드명
 	public String[] getTypeArr() {
+		
+		//type이 null이라는 것은 검색버튼을 누르지 않았다는 것.
+		//type에 TW값이 들어가면 type.split("")이 작동됨, {"TW"} -> {"T", "W"}
 		return type == null? new String[] {} : type.split("");
 	}
 	
+	//주소에 Criteria클래스 파라미터 추가해주는 메소드 -> ?pageNum=값1&amount=값2&type=값3&keyword=값4
 	public String getListLink() {
 		
+		//메소드 체이닝 문법
 		UriComponentsBuilder builder = UriComponentsBuilder.fromPath("")
 				.queryParam("pageNum", this.pageNum)
 				.queryParam("amount", this.getAmount())

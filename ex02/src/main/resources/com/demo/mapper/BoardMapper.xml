@@ -15,13 +15,44 @@
 		<!-- sql구문 뒤에 ; X -->
 	</select>
 	
+	<!-- 검색 조건 쿼리 -->
+	<sql id="criteria">
+		<trim prefix="(" suffix=") AND " prefixOverrides="OR"><!-- serffix 공백 주의 -->
+			<foreach collection="typeArr" item="type">
+			 <!-- jstl문법의 foreach와는 다름, 이건 mybatis 문법 -->
+			 <!-- 6개 type에 따라 상황이 달라지기 때문에 이렇게 복잡해짐 -->
+			 <!-- typeArr : 파라미터타입의 Criteria클래스의 getter메소드를 가리킴, 검색종류(타입)의 값을 참조 -->
+			 	<trim prefix="OR">
+			 		<choose>
+			 			<!-- T, C, W 제외 다른 type은 조합이기 때문에 when절은 3개만 -->
+			 			<when test="type == 'T'.toString()">
+			 				title LIKE '%' || #{keyword} || '%'
+			 			</when>
+			 			<when test="type == 'C'.toString()">
+			 				content LIKE '%' || #{keyword} || '%'
+			 			</when>
+			 			<when test="type == 'W'.toString()">
+			 				writer LIKE '%' || #{keyword} || '%'
+			 			</when>
+			 		</choose>
+			 	</trim>
+			</foreach>		
+		</trim>
+	</sql>
+	
+	<!-- 1)데이터 목록 -->
 	<select id="getListWithPaging" parameterType="com.demo.domain.Criteria" resultType="com.demo.domain.BoardVO">
 		<![CDATA[
 		SELECT rn, bno, title, content, writer, regdate
 		FROM(
 		    SELECT /*+ INDEX_DESC(tbl_board PK_BOARD) */ ROWNUM rn, bno, title, content, writer, regdate 
 		    FROM tbl_board
-		    WHERE ROWNUM <= #{pageNum} * #{amount}
+		    WHERE
+		]]>
+				<include refid="criteria"></include>
+				<!-- <![CDATA[ ]]> 안에 들어가면 태그가 아닌 문자열로 읽게 됨 -->
+		<![CDATA[
+			 ROWNUM <= #{pageNum} * #{amount}
 		)
 		WHERE rn > (#{pageNum}-1) * #{amount}	
 		]]>
@@ -30,8 +61,12 @@
 				CDATA 섹션 : <![CDATA[내용]]>  -->
 	</select>
 	
-	<select id="getTotalCount" resultType="int">
+	<!-- 2)테이블 데이터 개수 : 페이징 구현 사용 -->
+	<select id="getTotalCount" resultType="int" parameterType="com.demo.domain.Criteria">
 		SELECT count(*) FROM tbl_board
+		WHERE
+			<include refid="criteria"></include>
+			bno > 0		
 	</select>
 	
 	

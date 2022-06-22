@@ -13,7 +13,7 @@ public interface BoardService {
 	
 	List<BoardVO> getListWithPaging(Criteria cri);
 	
-	int getTotalCount();
+	int getTotalCount(Criteria cri);
 	
 	BoardVO get(Long bno);
 	

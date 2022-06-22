@@ -45,14 +45,46 @@
 
 	<script>
 		$(document).ready(function(){
+
+			let actionForm = $("#actionForm");
+			//id가 actionForm인  form태그를 참조, 전역변수로 선언
+
 			//페이지 번호 클릭하면 동작하는 기능
 			$("li.page-item a.page-link").on("click", function(e){
 				//a태그는 클릭하면 걸린 링크로 이동, 우리는 파라미터값으로 제공해야 함
 				//e : 이벤트 변수
 				e.preventDefault(); //태그의 기본특성을 제거 <a>태그의 링크기능을 제거
-				let url = "list?pageNum=" + $(this).attr("href") + "&amount=10"; 
+				
+				/* 검색기능이 추가되어 아래구문 사용 X
+					let url = "list?pageNum=" + $(this).attr("href") + "&amount=10"; 
 					location.href=url;
+				*/
 
+							
+				//현재 선택한 페이지번호 변경작업 <input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
+				actionForm.find("input[name='pageNum']").val($(this).attr("href")); //find() : actionForm이 폼태그를 참조하고, 폼태그의 하위 태그들을 찾고자할 때 쓰는 메소드
+
+				actionForm.submit(); //<form>태그 내용 전송
+			});
+
+			//목록에서 제목을 클릭시 동작 (페이징 + 검색 파라미터 + 글번호)
+			$("a.move").on("click", function(e) {
+
+				e.preventDefault(); //a태그를 클릭하면 동작하는 기능이 e인데 e의 기본 동작을 못하게 하는 것
+
+				//a태그의 href에는 글번호 값이 있음
+				let bno = $(this).attr("href"); //$(this) = $("a.move")
+
+				actionForm.find("input[name='bno']").remove();
+				//추가된 input태그가 캐쉬에 남지 않게 삭제
+
+				//actionForm 의 정보 + 글번호 추가하자
+				//DOM 작업
+				actionForm.append("<input type='hidden' name='bno' value='" + bno + "'>");
+				actionForm.attr("action", "/board/get");
+
+				actionForm.submit();
+			
 			});
 		});
 	</script>
@@ -65,6 +97,25 @@
 
 <div class="container">
   <h3>게시판 글목록</h3>
+  
+  <form id="searchForm" action="/board/list" method="get">
+  <%-- 검색 단추를 누르면  --%>
+    <select name="type">
+		 <option value="" <c:out value="${pageMaker.cri.type == null ? 'selected' : ''}" />>--</option> 
+		 <option value="T" <c:out value="${pageMaker.cri.type eq 'T' ? 'selected' : ''}" />>제목</option> <%-- Title --%>
+		 <option value="C" <c:out value="${pageMaker.cri.type eq 'C' ? 'selected' : ''}" />>내용</option> <%-- Content --%>
+		 <option value="W" <c:out value="${pageMaker.cri.type eq 'W' ? 'selected' : ''}" />>작성자</option> <%-- Writer --%>
+		 <option value="TC" <c:out value="${pageMaker.cri.type eq 'TC' ? 'selected' : ''}" />>제목  or 내용</option>
+		 <option value="TW" <c:out value="${pageMaker.cri.type eq 'TW' ? 'selected' : ''}" />>제목  or 작성자</option>
+		 <option value="TCW" <c:out value="${pageMaker.cri.type eq 'TCW' ? 'selected' : ''}" />>제목  or 작성자  or 내용</option>
+  	</select>
+  	<input type="text" name="keyword" value="${pageMaker.cri.keyword}">
+  	<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
+  	<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
+  	<button class="btn btn-info">Search</button>
+  </form>
+
+
   <table class="table table-hover">
 	  <thead>
 	    <tr>
@@ -81,7 +132,7 @@
 	    <%-- html 주석인 <!-- -->를 사용할 때 서버관련 코드는 작성 불가 
 	    	 ${} : html주석은 서버에서도 보이기 때문에 jsp주석인 여기 안에 설명을 달아야 한다.--%>
 	      <th scope="row"><c:out value="${board.bno}" /></th>
-	      <td><a href="/board/get?bno=${board.bno}"><c:out value="${board.title}" /></a></td>
+	      <td><a class="move" href="${board.bno}"><c:out value="${board.title}" /></a></td>
 	      <td><c:out value="${board.writer}" /></td>
 	      <td><fmt:formatDate value="${board.regdate}" pattern="yyyy-MM-dd hh:mm:ss"/></td>
 	    </tr>
@@ -121,9 +172,17 @@
 		    <li class="page-item">
 		      <a class="page-link" href="${pageMaker.endPage +1}">다음</a>
 		    </li>
-	    </c:if>
-	    
+	    </c:if>   
 	  </ul>
+	  
+	  <form id="actionForm" action="/board/list" method="get">
+			<%-- 페이지 번호 클릭시 list주소로 보낼 파라미터 작업 - model 덕분에 ${pageMaker.cri.___} 사용 가능 --%>
+			<input type="hidden" name="pageNum" value="${pageMaker.cri.pageNum}">
+			<input type="hidden" name="amount" value="${pageMaker.cri.amount}">
+			<input type="hidden" name="type" value="${pageMaker.cri.type}">
+			<input type="hidden" name="keyword" value="${pageMaker.cri.keyword}">
+			<%-- 한 번 검색하면 list()메소드에 Criteria cri 에 값이 들어가게 되어 위 사용 가능 --%>
+		</form>
 	</nav>
 
   <%@include file="/WEB-INF/views/include/footer.jsp" %>

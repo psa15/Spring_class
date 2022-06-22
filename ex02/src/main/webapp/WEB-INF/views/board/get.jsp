@@ -46,14 +46,20 @@
     <script>
       $(document).ready(function(){
         
+        let openForm = $("#openForm");
+
         //수정버튼 클릭시 동작구문
           $("#btn-modify").on("click", function(){
             //console.log("수정버튼 클릭"); 확인 완료 후 주석걸음
 
-            //수정 폼 주소
+            /*수정 폼 주소 - 필요 없어짐
             //location.href="수정폼주소?bno=" + 글번호;
             let bno = $("#bno").val(); //입력양삭의 값을 읽어옴, val()메소드는 입력양식(input, selectarea, textarea)에만 사용
             location.href="modify?bno=" + bno;
+            */
+
+            openForm.submit();
+
           });
           //코드를 수정하고 이클립스에서 한 번 파일을 열어서 확인해야 한다.
 
@@ -103,7 +109,14 @@
 	  <button type="button" id="btn-remove" class="btn btn-info">삭제</button>
 	  <button type="button" id="btn-list" class="btn btn-info">목록</button>
 
-
+	<form id="openForm" action="/board/modify" method="get">
+		<%-- 수정 이 작동되면 form 태그의 내용이 전달되게 --%>
+		<input type="hidden" name="bno" value="${board.bno}">
+		<input type="hidden" name="pageNum" value="${cri.pageNum}">
+		<input type="hidden" name="amount" value="${cri.amount}">
+		<input type="hidden" name="type" value="${cri.type}">
+		<input type="hidden" name="keyword" value="${cri.keyword}">
+	</form>
 
   <%@include file="/WEB-INF/views/include/footer.jsp" %>
 </div>

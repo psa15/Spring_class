@@ -69,7 +69,18 @@
 	    <input type="text" class="form-control" id="writer" name="writer" readonly value="${board.writer}">
 	  </div>
 	  <button type="submit" class="btn btn-info">수정하기</button>
+	  
+	  	<%-- 페이지 정보 
+	  	<input type="hidden" name="bno" value="${board.bno}">
+	  	 글번호 인풋태그는 이미 존재하기 때문에 있으면 안됨
+	  	--%>
+		<input type="hidden" name="pageNum" value="${cri.pageNum}">
+		<input type="hidden" name="amount" value="${cri.amount}">
+		<input type="hidden" name="type" value="${cri.type}">
+		<input type="hidden" name="keyword" value="${cri.keyword}">
+		
 	</form>
+	
 
   <%@include file="/WEB-INF/views/include/footer.jsp" %>
 </div>

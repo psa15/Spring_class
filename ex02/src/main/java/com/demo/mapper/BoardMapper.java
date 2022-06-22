@@ -14,13 +14,14 @@ public interface BoardMapper {
 	List<BoardVO> getList();
 	//데이터 한개 행이 BoardVO 객체 하나를 의미하므로 List 사용
 	
-	//현재는 검색기능 제외된 메소드
+	//현재는 검색기능 포함 - Criteria클래스에서 필드 4개 다 사용
 	List<BoardVO> getListWithPaging(Criteria cri);
 	//오라클에서 페이징으로 만든 뼈대의 pageNum과 amount 파라미터가 Criteria 클래스에 존재
 	//Criteria : pageNum, amount, type, keyword
 	
-	//pageDTO클래스에서 total 값 - 아직 검색기능 x 
-	int getTotalCount();
+	//pageDTO클래스에서 total 값 - 검색기능 포함
+	//Criteria클래스에서 검색필드 2개만 사용
+	int getTotalCount(Criteria cri);
 	
 	
 	BoardVO get(Long bno);
