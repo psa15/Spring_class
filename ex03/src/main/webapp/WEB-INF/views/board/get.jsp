@@ -11,15 +11,15 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.88.1">
-    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
-    <title>Pricing example · Bootstrap v4.6</title>
-
-    <link rel="canonical" href="https://getbootstrap.com/docs/4.6/examples/pricing/">
-
     
+    <title>Pricing example · Bootstrap v4.6</title>
+    
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Bootstrap core CSS -->
-<link href="/resources/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
 
 
     <style>
@@ -43,6 +43,7 @@
     <!-- Custom styles for this template -->
     <link href="/resources/css/pricing.css" rel="stylesheet">
 
+    <%-- 게시판 js--%>
     <script>
       $(document).ready(function(){
         
@@ -92,6 +93,59 @@
           });
       });
     </script>
+
+    <%--댓글 작업--%>
+    <script>
+      $(document).ready(function(){
+
+        //"Reply Write" 클릭하면 댓글 모달 대화상자 띄우기
+        $("#btn_replyWrite").on("click", function(){
+          $("#replyModal").modal('show');
+        });
+
+        //Save 눌렀을 때 댓글 저장
+        $("#btn_replySave").on("click", function(){
+
+          let replyer = $("#replyer").val(); //팝업 창의 replyer 데이터를 읽어와 replyer 변수에 저장
+          let reply = $("#reply").val();
+
+          //rno(시쿼스), bno(get.jsp에 있음- ${board.bno}), reply(받아옴), replyer(받아옴), replydate(시스템처리), updatedate(시스템처리)
+          
+          //자바스크립트 Object 구문 {키:값}          
+          let replyobj = { bno:${board.bno}, replyer:replyer, reply:reply}; //표시는 에러인데 실제는 아님
+          //{bno : 글번호, replyer : replyer변수의 값으로 해석, reply : reply변수로 해석} - 자바스크립트 문법에서 이렇게 인식,
+          //{이름 : 변수로서 해석}
+
+          //Object문법을 json 문자열 방식으로
+          let replyStr = JSON.stringify(replyobj);
+          console.log(replyStr);
+
+          $.ajax({
+            type: 'post',
+            url: '/replies/new',
+
+            //header에 보낼 데이터가 어떤 형식인지 명시
+            headers: {
+              "contentType" : "application/json", "X-HTTP-Method_Override" : "POST"
+            },
+
+            //넘어오는 데이터가 텍스트다 : controller의 리턴값 "success" 를 의미
+            dataType: 'text',
+            data: replyStr,
+            success: function(result) {
+              //이게 반응되려면 서버측에서 정확한 상태코드 값이 200번이라고 보내줘야 함
+              //result에 success가 들어가게 됨
+              //콜백함수: 내가 함수를 하나 호출했어 그 결과가 다시 다른 함수를 호출?
+              if(result == "success"){
+                alert("댓글 데이터 삽입 성공");
+              }
+            }
+
+          });
+        });
+
+      });
+    </script>
   </head>
   <body>
     
@@ -136,12 +190,59 @@
 		<input type="hidden" name="keyword" value="${cri.keyword}">
 	</form>
 
+  <!-- 댓글 목록 출력 위치-->
+  <div class="row"> <!-- 부트스트랩에서 제공하는 선택자 row : 테이블처럼 한 행을 의미-->
+    
+    <!-- 댓글 쓰기-->
+    <div class="xol-12">
+      <button type="button" id="btn_replyWrite" class="btn btn-info"> Reply Write </button>
+    </div>
+    
+    <!--댓글 목록-->
+    <div class="row">
+      <div class="col-12"><!--12개 중 12개 한 줄을 다 쓰겠다-->
+          <div id="replyList">
 
+          </div>
+
+      </div>
+    </div>
+    
+  </div>
 
 
   <%@include file="/WEB-INF/views/include/footer.jsp" %>
 </div>
- 
+    
+<!-- Modal Dialog (댓글쓰기 팝업창)-->
+<div class="modal fade" id="replyModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New Reply</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="replyer" class="col-form-label">Replyer:</label>
+            <input type="text" class="form-control" id="replyer" name="replyer">
+          </div>
+          <div class="form-group">
+            <label for="reply" class="col-form-label">Reply:</label>
+            <textarea class="form-control" id="reply" name="reply"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" id="btn_replySave" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
   </body>
 </html>
 
