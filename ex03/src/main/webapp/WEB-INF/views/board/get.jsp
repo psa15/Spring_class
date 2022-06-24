@@ -11,13 +11,16 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Hugo 0.88.1">
-    
     <title>Pricing example · Bootstrap v4.6</title>
-    
-    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
+    <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Include Handlebars from a CDN -->
+	<script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+
+
     <!-- Bootstrap core CSS -->
     <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
 
@@ -43,178 +46,221 @@
     <!-- Custom styles for this template -->
     <link href="/resources/css/pricing.css" rel="stylesheet">
 
-    <%-- 게시판 js--%>
     <script>
+      //1.게시판작업
       $(document).ready(function(){
+
+        let operForm = $("#operForm");
         
-        let openForm = $("#openForm");
+        //수정버튼 클릭시 동작구문. 	<button type="button" id="btn_modify" class="btn btn-primary">Modify</button>
+          $("#btn_modify").on("click", function(){
+            //console.log("수정버튼 클릭"); //이클립스에서 해당파일을 읽어주어야 한다.
+            // 수정폼 주소
+            //let bno = $("#bno").val();  // 입력양식 태그의 값을 읽어옴.
+            //location.href = "modify?bno=" + bno;
 
-        //수정버튼 클릭시 동작구문
-          $("#btn-modify").on("click", function(){
-            //console.log("수정버튼 클릭"); 확인 완료 후 주석걸음
 
-            /*수정 폼 주소 - 필요 없어짐
-            //location.href="수정폼주소?bno=" + 글번호;
-            let bno = $("#bno").val(); //입력양삭의 값을 읽어옴, val()메소드는 입력양식(input, selectarea, textarea)에만 사용
-            location.href="modify?bno=" + bno;
-            */
+            operForm.submit();
 
-            openForm.submit();
 
           });
-          //코드를 수정하고 이클립스에서 한 번 파일을 열어서 확인해야 한다.
 
-        //삭제버튼 클릭시 동작구문
-          $("#btn-remove").on("click", function(){
-            //console.log("삭제버튼 클릭"); 확인 완료
+        //제거버튼 클릭시 동작구문. <button type="button" id="btn_remove" class="btn btn-danger">Remove</button>
+          $("#btn_remove").on("click", function(){
+            //console.log("제거버튼 클릭");
+            //제거주소
             let bno = $("#bno").val();
-            if(!confirm(bno + "번 글을 삭제하시겠습니까?")) return;
-            //확인 누르면 if(!true) 여서 false로 작용하여 삭제됨
-            location.href="remove?bno=" + bno;
+            if(!confirm(bno + "번 글을 삭제하겠습니까?")) return;
+
+            location.href = "remove?bno=" + bno;
           });
 
-        //목록버튼 클릭시 동작구문 <button type="button" id="btn-list" class="btn btn-info">목록</button>
-          $("#btn-list").on("click", function(){
 
-            //필요없는 글번호 삭제
-            openForm.find("input[name='bno']").remove();
-            /*
-            name="bno"가 두 개 존재
-              - 하나는 openForm태그, 
-              - 또 하나는 <div>의 글번호
-                하지만 openForm이 <form>태그를 참조하여 딱 제거하고 싶은 <input>태그의 글번호 정보만 제거
-            */
-            //console.log("delete");
-            
-            //주소 변경
-            openForm.attr("action", "/board/list");
+        //목록버튼 클릭시 동작구문
+        $("#btn_list").on("click", function(){
+          operForm.find("input[name='bno']").remove();
+          operForm.attr("action", "/board/list");
 
-            openForm.submit();
-          });
+          operForm.submit();
+        });
+
       });
     </script>
 
-    <%--댓글 작업--%>
     <script>
+      //2.댓글작업
       $(document).ready(function(){
 
-        //"Reply Write" 클릭하면 댓글 모달 대화상자 띄우기
+        //댓글 모달대화상자 띄우기
         $("#btn_replyWrite").on("click", function(){
           $("#replyModal").modal('show');
         });
 
-        //Save 눌렀을 때 댓글 저장
+
+        //댓글저장하기
         $("#btn_replySave").on("click", function(){
 
-          let replyer = $("#replyer").val(); //팝업 창의 replyer 데이터를 읽어와 replyer 변수에 저장
+          let replyer = $("#replyer").val();
           let reply = $("#reply").val();
 
-          //rno(시쿼스), bno(get.jsp에 있음- ${board.bno}), reply(받아옴), replyer(받아옴), replydate(시스템처리), updatedate(시스템처리)
+          //자바스크립트 Object구문
+          let replyObj = { bno:${board.bno }, replyer:replyer, reply:reply };
           
-          //자바스크립트 Object 구문 {키:값}          
-          let replyobj = { bno:${board.bno}, replyer:replyer, reply:reply}; //표시는 에러인데 실제는 아님
-          //{bno : 글번호, replyer : replyer변수의 값으로 해석, reply : reply변수로 해석} - 자바스크립트 문법에서 이렇게 인식,
-          //{이름 : 변수로서 해석}
+          //서버측에 보낼 데이터를 JSON문법ㅂ구조의 문자열로 변환작업{"bno":5120, "replyer":"user01", "reply":"댓글테스트"}
+          let replyStr = JSON.stringify(replyObj);
 
-          //Object문법을 json 문자열 방식으로
-          let replyStr = JSON.stringify(replyobj);
           console.log(replyStr);
 
           $.ajax({
             type: 'post',
             url: '/replies/new',
-
-            //header에 보낼 데이터가 어떤 형식인지 명시
             headers: {
-              "contentType" : "application/json", "X-HTTP-Method_Override" : "POST"
+              "Content-Type" : "application/json", "X-HTTP-Method-Override" : "POST"
             },
-
-            //넘어오는 데이터가 텍스트다 : controller의 리턴값 "success" 를 의미
-            dataType: 'text',
-            data: replyStr,
+            dataType: 'text', //매핑주소의 리턴값
+            data: replyStr, //{"bno":5120, "replyer":"user01", "reply":"댓글테스트"} : bno, reply, replyer는 ReplyVO클래스에서 참조된 것
             success: function(result) {
-              //이게 반응되려면 서버측에서 정확한 상태코드 값이 200번이라고 보내줘야 함
-              //result에 success가 들어가게 됨
-              //콜백함수: 내가 함수를 하나 호출했어 그 결과가 다시 다른 함수를 호출?
               if(result == "success"){
-                alert("댓글 데이터 삽입 성공");
+                alert("댓글 데이타 삽입 성공");
               }
             }
-
           });
-        });
 
+        });
       });
+    </script>
+
+  <!-- 핸들바 템플릿 : 댓글 목록작업 -->
+    <!-- bootstrap 참고
+    	가져오는 데이터가 여러개일 때 {{#each .}} 사용
+		<script>안에 적으니까 오류남 아 당연하네 스크립트는 주석이 // 니까.... -->
+	<script id="reply-template" type="text/x-handlebars-template">
+  
+    {{#each .}}
+      <div class="form-group">
+        <label for="replyer">작성자</label>
+        <input type="hidden" id="rno" name="rno" value="{{rno}}">
+        <input type="text" class="form-control" id="replyer" value="{{replyer}}" readonly>
+      </div>
+      <div class="form-group">
+        <label for="reply">등록일: {{replydate}}</label>
+        <textarea class="form-control" id="reply" rows="3" readonly>{{reply}}</textarea>
+      </div>  
+    {{/each}}
+	</script>
+
+    <script>
+      //3) 댓글 목록 요청 작업(댓글 + 페이징)
+      let bno = ${board.bno}; //el문법 - 본문 글번호
+      let replyPage =1;
+
+      let url = "/replies/pages/" + bno + "/" + replyPage + ".json"; //댓글 목록 및 페이지 정보 요청 주소
+      
+      getPage(url); //서버측으로 코드를 받아옴 (1차 데이터)
+
+      //댓글목록출력작업
+      /* 함수만드는 법
+      1)
+      function 함수명() {
+
+      }
+      2)
+      let 변수명 = function() {  }
+      */
+      let printData = function(replyData, target, templateObj){
+        //replyData : 댓글 목록 데이터, target : 댓글이 삽입될 태그 위치, templateObj : 핸들바 템플릿 참조 객체
+        
+        //핸들바 템플릿 컴파일
+        let template = Handlebars.compile(templateObj.html());
+        //핸들바 템플릿에 데이터를 바인딩하여 html  생성
+        let html = template(replyData); //스프링에서 넘어온 데이터(replyData)가 html에 전달
+        //댓글이 삽입될 태그 위치에 혹시나 있을지도 모르는 태그를 깔끔하게 삭제
+        target.empty();
+        //생성된 html을 target에 주입
+        target.append(html);
+      }
+
+
+      //ajax구문으로 요청하는 작업
+      function getPage(url) {
+
+        //ajax 메소드 - $.getJSON : 결과값을 JSON으로 요청하겠다
+        $.getJSON(url, function(data){          
+          //console.log(data);
+          
+          // data.list : 댓글 목록데이터, data.pageMaker : 댓글 페이징 정보 -> data안에 있음
+          printData(data.list, $("#replyList"), $("#reply-template"));
+          //target : 밑에 댓글 목록 삽입될 위치 태그의 id
+        }); 
+
+        //댓글 목록 출력기능 함수
+
+        //댓글 페이징 기능
+      }
+
     </script>
   </head>
   <body>
     
-<%@include file="/WEB-INF/views/include/header.jsp" %>
+<%@ include file="/WEB-INF/views/include/header.jsp" %>
 
-<%@include file="/WEB-INF/views/include/Carousel.jsp" %>
+<%@ include file="/WEB-INF/views/include/Carousel.jsp" %>
 
 
 <div class="container">
   <h3>게시판 글읽기</h3>
-  	  <div class="form-group">
-	    <label for="bno">글번호</label>
-	    <input type="text" class="form-control" id="bno" name="bno" readonly value="${board.bno}">
+	  <div class="form-group">
+	    <label for="title">번호</label>
+	    <input type="text" class="form-control" id="bno" name="bno" readonly value="${board.bno }">
 	  </div>
 	  <div class="form-group">
 	    <label for="title">제목</label>
-	    <input type="text" class="form-control" id="title" name="title" readonly value="${board.title}">
-	    <%-- BoardVO.java 안의 필드명을 name에 적기 --%>
+	    <input type="text" class="form-control" id="title" name="title" readonly value="${board.title }">
 	  </div>
 	  <div class="form-group">
 	    <label for="content">내용</label>
-	    <textarea class="form-control" id="content" rows="3" name="content" readonly>${board.content}</textarea>
-	  </div>
+	    <textarea class="form-control" id="content" rows="3" name="content" readonly>${board.content }</textarea>
+  	  </div>
 	  <div class="form-group">
 	    <label for="writer">작성자</label>
-	    <input type="text" class="form-control" id="writer" name="writer" readonly value="${board.writer}">
+	    <input type="text" class="form-control" id="writer" name="writer" readonly value="${board.writer }">
 	  </div>
 	  <div class="form-group">
-	    <label for="regdate">등록일</label>
-	    <input type="text" class="form-control" id="regdate" name="regdate" readonly value="<fmt:formatDate value="${board.regdate}" pattern="yyyy-MM-dd hh:mm:ss"/>">
+	    <label for="writer">등록일</label>
+	    <input type="text" class="form-control" id="regdate" name="regdate" readonly value="<fmt:formatDate value="${board.regdate }" pattern="yyyy-MM-dd hh:ss"/>">
 	  </div>
-	  <button type="button" id="btn-modify" class="btn btn-info">수정</button>
-	  
-	  <button type="button" id="btn-list" class="btn btn-info">목록</button>
-
-	<form id="openForm" action="/board/modify" method="get">
-		<%-- 수정 이 작동되면 form 태그의 내용이 전달되게 --%>
-		<input type="hidden" name="bno" value="${board.bno}">
+	<button type="button" id="btn_modify" class="btn btn-primary">Modify</button>
+	<button type="button" id="btn_list" class="btn btn-primary">List</button>
+	
+	<form id="operForm" action="/board/modify" method="get">
+		<input type="hidden" name="bno" value="${ board.bno}">
 		<input type="hidden" name="pageNum" value="${cri.pageNum}">
 		<input type="hidden" name="amount" value="${cri.amount}">
 		<input type="hidden" name="type" value="${cri.type}">
 		<input type="hidden" name="keyword" value="${cri.keyword}">
 	</form>
 
-  <!-- 댓글 목록 출력 위치-->
-  <div class="row"> <!-- 부트스트랩에서 제공하는 선택자 row : 테이블처럼 한 행을 의미-->
-    
-    <!-- 댓글 쓰기-->
-    <div class="xol-12">
-      <button type="button" id="btn_replyWrite" class="btn btn-info"> Reply Write </button>
+  <div class="row">
+    <div class="col-12">
+      <button type="button" id="btn_replyWrite" class="btn btn-primary">Reply Write</button>
     </div>
-    
-    <!--댓글 목록-->
-    <div class="row">
-      <div class="col-12"><!--12개 중 12개 한 줄을 다 쓰겠다-->
-          <div id="replyList">
+  </div>
 
-          </div>
+  <!--댓글 목록-->
+  <div class="row">
+    <div class="col-12">
+      <div id="replyList">
 
       </div>
     </div>
-    
   </div>
 
 
-  <%@include file="/WEB-INF/views/include/footer.jsp" %>
+
+  <%@ include file="/WEB-INF/views/include/footer.jsp" %>
 </div>
-    
-<!-- Modal Dialog (댓글쓰기 팝업창)-->
+
+<!--Modal Dialog-->
 <div class="modal fade" id="replyModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -228,7 +274,7 @@
         <form>
           <div class="form-group">
             <label for="replyer" class="col-form-label">Replyer:</label>
-            <input type="text" class="form-control" id="replyer" name="replyer">
+            <input type="text" class="form-control" id="replyer" name="replyer"><%-- 값을 읽어오는 것 --%>
           </div>
           <div class="form-group">
             <label for="reply" class="col-form-label">Reply:</label>
@@ -243,6 +289,7 @@
     </div>
   </div>
 </div>
+    
   </body>
 </html>
 

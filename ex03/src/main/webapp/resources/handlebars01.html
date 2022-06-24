@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<!--  jquery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!-- Include Handlebars from a CDN
+https://handlebarsjs.com/guide/#what-is-handlebarsd 에서 다운 -->
+<script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+
+<script id="demo-template" type="text/x-handlebars-template">
+	<table>
+		<thead>
+			<th>이름</th>
+			<th>아이디</th>
+			<th>메일 주소</th>		
+		</thead>
+		<tbody>
+			{{#users}}//data가 users라는 이름으로 데이터라 5개가 있기 때문에 <tr>이 5개 필요{{#users}}얘가 5번 반복해줌
+			<tr> 
+				<td>{{name}}</td>
+				<td>{{id}}</td>
+				<td>{{email}}</td>
+			</tr>
+			{{/users}}
+		</tbody>
+	</table>
+</script>
+<script>
+	let source = $("#demo-template").html(); //입력양식태그는 .val, 일반 html태그는 .html
+	let template = Handlebars.complie(source); //Handlebars : handlebars.js가 제공하는 객체
+	
+	//데이터 : 실제 작업은 스프링에서 JSON형식으로 받을 것
+	let data = {
+		users: [
+			{name:"홍길동1", id:"user01", email:"user01@abc.com"},
+			{name:"홍길동2", id:"user02", email:"user02@abc.com"},
+			{name:"홍길동3", id:"user03", email:"user03@abc.com"},
+			{name:"홍길동4", id:"user04", email:"user04@abc.com"},
+			{name:"홍길동5", id:"user05", email:"user05@abc.com"}
+		]	
+	};
+	
+	//핸들바 템플릿에 데이터를 바인딩해서 HTML 생성
+	let html = template(data);
+	
+	$('body').append(html);
+</script>
+</head>
+<body>
+
+</body>
+</html>
