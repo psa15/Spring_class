@@ -10,7 +10,7 @@
 		<![CDATA[
 		SELECT rn, rno, bno, reply, replyer, replydate, updatedate 
 		FROM (
-		    SELECT /*+ INDEX_DESC(tbl_reply PK_REPLY*/ ROWNUM rn, rno, bno, reply, replyer, replydate, updatedate
+		    SELECT /*+ INDEX_DESC(TBL_REPLY PK_REPLY) */ ROWNUM rn, rno, bno, reply, replyer, replydate, updatedate
 		    FROM tbl_reply
 		    WHERE  bno = #{bno} AND ROWNUM <= #{cri.pageNum} * #{cri.amount}
 		)
@@ -21,4 +21,13 @@
 	<select id="getCountByBno" resultType="int" parameterType="long">
 		SELECT COUNT(*) FROM tbl_reply WHERE bno = #{bno}
 	</select>
+	
+	<update id="update">
+		UPDATE tbl_reply SET reply = #{reply}, updatedate = sysdate
+		WHERE rno = #{rno}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM tbl_reply WHERE rno = #{rno}
+	</delete>
 </mapper>

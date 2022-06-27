@@ -3,13 +3,17 @@ package com.demo.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.ws.Response;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +30,7 @@ import lombok.extern.log4j.Log4j;
  이 컨트롤러 클래스는 jsp파일 사용 X (@RestController사용해서)
  모든 매핑주소는 ajax요청으로 사용
  */
-@RestController
+@RestController //@Controller + @ResponseBody의 성격으로 리턴값을 반환, 리턴값이 객체면 json형식으로 변환하여 반환
 @RequestMapping("/replies/*")
 @Log4j
 public class ReplyController {
@@ -95,6 +99,30 @@ public class ReplyController {
 		//entity 객체
 		entity = new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
 		//ResponseEntity<Map<String,Object>>(@Nullable Map<String, Object> body, HttpStatus status)
+		
+		return entity;
+	}
+	
+	//일반적인 웹브라우저는 get, post방식만 지원 -> 코드로 스프링에서 PUT요쳥으로 인식되기 위해 헤더 요청을 변경
+	@PutMapping(value = "/modify/{rno}")
+	public ResponseEntity<String> update(@PathVariable("rno") Long rno, @RequestBody ReplyVO vo) {
+		ResponseEntity<String> entity = null;
+		
+		service.update(vo);
+		
+		entity = new ResponseEntity<String>("success", HttpStatus.OK);
+		
+		return entity;
+		
+	}
+	
+	@DeleteMapping("/delete/{rno}")
+	public ResponseEntity<String> delete(@PathVariable("rno") Long rno){
+		ResponseEntity<String> entity = null;
+		
+		service.delete(rno);
+		
+		entity = new ResponseEntity<String>("success", HttpStatus.OK);
 		
 		return entity;
 	}

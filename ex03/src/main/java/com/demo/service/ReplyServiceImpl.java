@@ -27,5 +27,15 @@ public class ReplyServiceImpl implements ReplyService {
 		//mapper.getListWithPaging(cri, bno) : 부모글을 참조하는 댓글 목록
 		return new ReplyPageDTO(mapper.getCountByBno(bno), mapper.getListWithPaging(cri, bno));
 	}
+
+	@Override
+	public int update(ReplyVO vo) {
+		return mapper.update(vo);
+	}
+
+	@Override
+	public int delete(Long rno) {
+		return mapper.delete(rno);
+	}
 	
 }

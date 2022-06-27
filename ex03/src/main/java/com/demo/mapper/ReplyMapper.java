@@ -20,4 +20,10 @@ public interface ReplyMapper {
 	//댓글 목록 불러오는데 필요한 본문글을 참조하는 댓글의 개수
 	int getCountByBno(Long bno);
 	
+	//댓글 수정
+	int update(ReplyVO vo);
+	
+	//댓글 삭제
+	int delete(Long rno);
+	
 }

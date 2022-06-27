@@ -10,4 +10,10 @@ public interface ReplyService {
 	
 	//댓글목록
 	ReplyPageDTO getListPage(Criteria cri, Long bno);
+	
+	//댓글 수정
+	int update(ReplyVO vo);
+	
+	//댓글 삭제
+	int delete(Long rno);
 }

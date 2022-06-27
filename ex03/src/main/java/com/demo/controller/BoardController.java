@@ -20,7 +20,7 @@ import com.demo.service.BoardService;
 
 import lombok.extern.log4j.Log4j;
 
-@Controller
+@Controller //jsp를 반환하는 기능
 @Log4j
 @RequestMapping("/board/*")
 public class BoardController {
