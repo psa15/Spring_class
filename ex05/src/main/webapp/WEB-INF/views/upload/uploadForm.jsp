@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title> form 방식</title>
 </head>
 <body>
 	<form action="uploadFormAction" method="post" enctype="multipart/form-data">

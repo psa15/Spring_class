@@ -2,6 +2,8 @@ package com.demo.domain;
 
 import lombok.Data;
 
+//업로드된 파일정보를 저장목적으로 생성된 클래스
+
 @Data
 public class AttachFileDTO {
 //Data Transfer Object - VO랑 기능은 비슷한데 VO는 테이블을 구조로
