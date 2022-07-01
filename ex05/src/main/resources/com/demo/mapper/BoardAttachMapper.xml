@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.mapper.BoardAttachMapper">
+
+	<!-- 첨부파일 저장- values에는 BoardAttachVO클래스 필드명을 작성(대소문자 구분- getter로 작동되어야 함) -->
+	<insert id="insert" parameterType="com.demo.domain.BoardAttachVO">
+		INSERT INTO tbl_attach(uuid, uploadpath, filename, filetype, bno)
+		VALUES(#{uuid}, #{uploadPath}, #{fileName}, #{fileType}, #{bno})
+	</insert>
+
+</mapper>

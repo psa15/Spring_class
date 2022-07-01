@@ -35,16 +35,19 @@ public class BoardController {
 		
 	}
 	
+	//HTTP 400 상태코드 : 클라이언트에서 보내는 데이터가 메서드의 파라미터에 적합하지 않을 경우 발생
 	@PostMapping("/write")
 	public String write(BoardVO vo) {
 		
 		service.insert(vo);
 		//제출하기 클릭 시 sql문 실행되어 데이터베이스에 삽입
 		
+		
 		//제출하기 클릭하면 목록으로 넘어가야 함
 		//공통경로 포함한 주소 작성
 		return "redirect:/board/list";
 	}
+	
 	/*
 	//페이징 및 검색기능 추가할 예정
 	//board/list 주소 요청으로 list.jsp에 데이터 전달작업을 하고자 할 경우 메소드의 파라미터로 Model model 추가 필요

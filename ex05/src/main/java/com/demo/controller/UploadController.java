@@ -3,6 +3,8 @@ package com.demo.controller;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -305,6 +307,54 @@ public class UploadController {
 		}
 		
 		entity = new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
+		return entity;
+	}
+	
+	//파일삭제
+	@PostMapping("/deletefile")
+	@ResponseBody //리턴되는 데이터를 그대로 브라우저에 전달(json으로 반환 X)
+	public ResponseEntity<String> deleteFile(String fileName, String type) {
+		
+		ResponseEntity<String> entity = null;
+		
+		log.info("deleteFile: " + fileName);
+		
+		File file;
+			
+		try {
+			/*
+			 fileName : 2022%5C07%5C01/s_8f59f3b4-96d0-4ac5-97ca-f09fc2359491_geewon2.jpg
+			 - 이렇게 인코딩된 파일이름이 들어와 자바에서 디코딩으로 원래 문자열로 변환해야 함
+			 - URLEncoder, URLDecoder
+			 - URLDecoder.decode(fileName,  "UTF-8") : 예외발생
+			 */	
+			//원본파일 + 썸네일 파일 삭제
+			file = new File("C:\\Dev\\upload\\" + URLDecoder.decode(fileName,  "UTF-8"));			
+			file.delete();
+			
+			//원본 이미지 삭제
+			if(type.equals("image")) {
+				String originFileName = file.getAbsolutePath().replaceAll("s_", "");
+				//file.getAbsolutePath() : "C:\\Dev\\upload\\" + URLDecoder.decode(fileName,  "UTF-8") 이 경로를 다 가져옴
+				//.replaceAll("s_", "") : 썸네일 이미지파일명에서 s_를 지우기
+				
+				log.info("originFileName: " + originFileName);
+				
+				file = new File(originFileName);
+				file.delete();
+								
+				return new ResponseEntity<String>("success", HttpStatus.OK);
+			}
+			
+			
+			
+		}catch (Exception ex) {
+			ex.printStackTrace();
+			
+			//삭제하고자 하는 파일명이 존재하지 않을 경우
+			return new ResponseEntity<String>("error", HttpStatus.BAD_REQUEST);
+		}
+		
 		return entity;
 	}
 }

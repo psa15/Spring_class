@@ -7,8 +7,9 @@ import com.demo.domain.Criteria;
 
 public interface BoardMapper {
 
-	//abstract method
-	void insert(BoardVO vo);
+	void insert(BoardVO vo); //게시판 글만 저장하는 구버전
+	
+	Long insertSelectKey(BoardVO vo); //파일첨부도 저장하는 신버전
 	
 	/*리스트*/
 	List<BoardVO> getList();

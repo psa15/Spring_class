@@ -167,7 +167,7 @@
                     //\" : "" 안에 또 ""를 사용하고 싶을 때
                     //javascript:showImage('" + originPath + "') : 상세보기 함수
                     str += "<li><a href=\"javascript:showImage('" + originPath + "')\"><img src='display?fileName=" + fileCalPath + "'></a>"
-                                 + "<span style='cursor:pointer;' data-file=\'" + fileCalPath + "\' data-type=image'> x </span></li>";
+                                 + "<span style='cursor:pointer;' data-file=\'" + fileCalPath + "\' data-type=image> x </span></li>";
                 }   
                 
             });
@@ -239,7 +239,7 @@
 
             //파일 삭제
             //$("정적태그").on("click", "동적태그",function(){})
-            $(".uploadResult").on("click", "ul li div span",function(){
+            $(".uploadResult").on("click", "ul li span",function(){
                 console.log("삭제 이벤트 진행");
 
                 //<span data-file="파일명", data-type="file">을 읽어오기
@@ -248,6 +248,16 @@
 
                 console.log("파일명: " + targetFile);
                 console.log("파일형식: " + type);
+
+                $.ajax({
+                   url: 'deletefile',
+                   data: {fileName:targetFile, type:type}, //js object문법 : {key:value, key:value} -> {파라미터명:value, 파라미터명:value} 
+                   dataType: 'text', //스프링에서 넘어오는 리턴값(result의 값이 text형식이다)
+                   type: 'post', 
+                   success: function(result){
+                        alert(result);
+                   }
+                });
             });
         });
     </script>
