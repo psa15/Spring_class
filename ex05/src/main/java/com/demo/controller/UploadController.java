@@ -333,7 +333,7 @@ public class UploadController {
 			file.delete();
 			
 			//원본 이미지 삭제
-			if(type.equals("image")) {
+			if(type.equals("true")) {
 				String originFileName = file.getAbsolutePath().replaceAll("s_", "");
 				//file.getAbsolutePath() : "C:\\Dev\\upload\\" + URLDecoder.decode(fileName,  "UTF-8") 이 경로를 다 가져옴
 				//.replaceAll("s_", "") : 썸네일 이미지파일명에서 s_를 지우기

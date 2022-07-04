@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.demo.domain.BoardAttachVO;
 import com.demo.domain.BoardVO;
 import com.demo.domain.Criteria;
 import com.demo.domain.PageDTO;
@@ -97,11 +98,22 @@ public class BoardController {
 	public void get(@RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri, Model model) {
 		log.info("글번호: " + bno);
 		
-		//댓글 목록작업 존재X -
-		BoardVO board = service.get(bno);
-		model.addAttribute("board", board);
+		//댓글 목록작업 존재X - get.jsp에서 ajax로 진행함
+		//(ajax로 진행안했을 때 댓글 목록작업 추가할 위치) - model데이터로 추가하여 jsp로 보여주면 됨
 		
+		BoardVO board = service.get(bno); //게시물과 파일정보작업 포함됨 (7/4)
+		
+		//uploadPath의 \를 /로 변환하여 모델에 추가
+		List<BoardAttachVO> attachList = board.getAttachList();
+		for(int i=0; i<attachList.size(); i++) {
+			BoardAttachVO attachVO = attachList.get(i);
+			attachVO.setUploadPath(attachVO.getUploadPath().replace("\\", "/"));
+			//.replace("\\", "/") : "\\" \두개인 이유는 앞의 \는 \를 의미하고 뒤의 \는 "가 "의 의미라는 것
+		}
+		
+		model.addAttribute("board", board);		
 	}
+	
 	@PostMapping("/modify")
 	public String modify(BoardVO vo, Criteria cri, RedirectAttributes rttr) {
 		//BoardVO 객체가 기본 생성자를 통해 객체를 생성하고 setter메소드로 데이터를 얻는 일을 스프링이 해줌

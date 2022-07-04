@@ -23,9 +23,11 @@ public interface ReplyMapper {
 	//댓글 수정
 	int update(ReplyVO vo);
 	
-	//댓글 삭제
+	//댓글 삭제 - primary key로 삭제
 	int delete(Long rno);
 	
+	//게시판 삭제 시 해당 게시판의 모든 댓글을 삭제하는  메소드 - fk 컬럼값으로 삭제
+	void deleteByBno(Long bno);	
 
 	//replycnt 작업
 	/*

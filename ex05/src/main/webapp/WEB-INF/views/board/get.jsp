@@ -42,6 +42,49 @@
       }
     </style>
 
+    <!--파일 첨부 스타일-->
+    <style>
+      .uploadResult {
+        width: 100%;
+        background-color: gray;
+      }
+      
+      .uploadResult ul {
+        display: flex;
+        flex-flow: row;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      .uploadResult ul li {
+        list-style: none;
+        padding: 10px;
+      }
+      
+      .uploadResult ul li img {
+        width: 100px;
+      }
+    </style>
+    <style>
+      .bigPictureWrapper {
+        position: absolute;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        top:0%;
+        width:100%;
+        height:100%;
+        background-color: gray; 
+        z-index: 100;
+      }
+      
+      .bigPicture {
+        position: relative;
+        display:flex;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
     
     <!-- Custom styles for this template -->
     <link href="/resources/css/pricing.css" rel="stylesheet">
@@ -443,7 +486,7 @@
 
       }
     
-    </script>
+    </script>    
   </head>
   <body>
     
@@ -488,6 +531,45 @@
   <div class="row">
     <div class="col-12">
       <button type="button" id="btn_replyWrite" class="btn btn-primary">Reply Write</button>
+    </div>
+  </div>
+
+  <!--원본 이미지 표시 위치-->
+  <div class="bigPictureWrapper"> <!--css효과를 위한 태그-->
+    <div class="bigPicutre"></div>  <!--실제 이미지가 보여질 태그-->
+  </div>
+ 
+  <!--파일 첨부 목록(bootstrap 활용)-->
+  <div class="row">
+    <div class="col-12">
+      <div class="box-header with-border">
+        <h3 class="box-title">Files</h3>
+      </div>
+      <div class="box-body">
+        <!--업로드된 파일 정보 출력 위치-->
+        <div class="uploadResult">
+          <ul>
+          	<c:forEach items="${board.attachList}" var="attachVO">
+          		<c:if test="${attachVO.fileType == 'true'}"> <!-- db상에서는 1이지만 자동으로 true로 형변환 됨 -->
+	          		<li>          			
+	          			<a href="javascript:showImage('${attachVO.uploadPath}${attachVO.uuid}_${attachVO.fileName})">
+	          				<img src='/upload/display?fileName=${attachVO.uploadPath}/s_${attachVO.uuid}_${attachVO.fileName}'> 파일명 : ${attachVO.fileName}
+	          			</a>
+	          			<span style="cursor:pointer;" data-uuid="${attachVO.uuid}" data-uploadpath="${attachVO.uploadPath}" data-filename="${attachVO.fileName}" data-filetype="true">  </span>
+	          		</li>
+          		</c:if>
+          		<c:if test="${attachVO.fileType == 'false'}">
+	          		<li>          			
+	          			<a href="javascript:showImage('${attachVO.uploadPath}${attachVO.uuid}_${attachVO.fileName})">
+	          				<img src='/resources/img/attach.png'> 파일명 : ${attachVO.fileName}
+	          			</a>
+	          			<span style="cursor:pointer;" data-uuid="${attachVO.uuid}" data-uploadpath="${attachVO.uploadPath}" data-filename="${attachVO.fileName}" data-filetype="true">  </span>
+	          		</li>
+          		</c:if>
+          	</c:forEach>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 

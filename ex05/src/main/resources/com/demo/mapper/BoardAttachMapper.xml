@@ -8,4 +8,11 @@
 		VALUES(#{uuid}, #{uploadPath}, #{fileName}, #{fileType}, #{bno})
 	</insert>
 
+	<select id="getFiles" resultType="com.demo.domain.BoardAttachVO" parameterType="long">
+		SELECT uuid, uploadpath, filename, filetype, bno FROM tbl_attach WHERE bno = #{bno}
+	</select>
+	
+	<delete id="deleteFiles" parameterType="long">
+		DELETE FROM tbl_attach WHERE bno = #{bno}
+	</delete>
 </mapper>
