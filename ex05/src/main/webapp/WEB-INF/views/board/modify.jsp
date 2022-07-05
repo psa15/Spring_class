@@ -387,9 +387,9 @@
           		<c:if test="${attachVO.fileType == true}"> <!-- db상에서는 1이지만 자동으로 true로 형변환 됨 -->
 	          		<li>          			
 	          			<a href="javascript:showImage('${attachVO.uploadPath}${attachVO.uuid}_${attachVO.fileName})">
-	          				<img src='/upload/display?fileName=${attachVO.uploadPath}/${attachVO.uuid}_${attachVO.fileName}'> 파일명 : ${attachVO.fileName}
+	          				<img src='/upload/display?fileName=${attachVO.uploadPath}/s_${attachVO.uuid}_${attachVO.fileName}'> 파일명 : ${attachVO.fileName}
 	          			</a>
-	          			<span style="cursor:pointer;" data-uuid="s_${attachVO.uuid}" data-uploadpath="${attachVO.uploadPath}" data-filename="${attachVO.fileName}" data-filetype="${attachVO.fileType}"> x  </span>
+	          			<span style="cursor:pointer;" data-uuid="${attachVO.uuid}" data-uploadpath="${attachVO.uploadPath}" data-filename="${attachVO.fileName}" data-filetype="${attachVO.fileType}"> x  </span>
 	          		</li>
           		</c:if>
           		<c:if test="${attachVO.fileType == false}">
@@ -397,7 +397,7 @@
 	          			<a href="javascript:showImage('${attachVO.uploadPath}${attachVO.uuid}_${attachVO.fileName})">
 	          				<img src='/resources/img/attach.png'> 파일명 : ${attachVO.fileName}
 	          			</a>
-	          			<span style="cursor:pointer;" data-uuid="${attachVO.uuid}" data-uploadpath="${attachVO.uploadPath}" data-filename="${attachVO.fileName}" data-filetype="false"> x  </span>
+	          			<span style="cursor:pointer;" data-uuid="${attachVO.uuid}" data-uploadpath="${attachVO.uploadPath}" data-filename="${attachVO.fileName}" data-filetype="${attachVO.fileType}"> x  </span>
 	          		</li>
           		</c:if>
           	</c:forEach>
@@ -415,4 +415,3 @@
     
   </body>
 </html>
-
